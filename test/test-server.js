@@ -178,4 +178,25 @@ describe('Recipe List', function(){
         });
       });
   });
+
+  it('should add recipe to list when request made to POST', function(){
+    const newRecipe = { name: 'hamburger', ingredients: ['buns', 'beef patty']};
+    return chai.request(app)
+      .post('/recipes')
+      .send(newRecipe)
+      .then(function(res){
+        expect(res).to.have.status(201);
+        expect(res).to.be.json;
+        expect(res.body).to.be.a('object');
+        expect(res.body).to.include.keys('id','name','ingredients');
+        expect(res.body.id).to.not.equal(null);
+        expect(res.body).to.deep.equal(
+          Object.assign(newRecipe, {id: res.body.id})
+        );
+      });
+
+
+  });
+
+
 });
