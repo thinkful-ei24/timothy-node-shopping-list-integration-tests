@@ -198,5 +198,40 @@ describe('Recipe List', function(){
 
   });
 
+  it('should update recipe upon PUT request', function(){
+    const updateObject = { 
+      name: 'hot dog', 
+      ingredients: ['sausage', 'buns']
+    };
+
+    return chai.request(app)
+      .get('/recipes')
+      .then(function(res){
+        updateObject.id = res.body[0].id;
+        return chai.request(app)
+          .put(`/recipes/${updateObject.id}`)
+          .send(updateObject)
+          .then(function(res){
+            expect(res).to.have.status(204);
+          });
+
+      });
+
+  });
+
+  it("should delete recipe on DELETE", function() {
+    return (
+      chai.request(app)
+        .get("/recipes")
+        .then(function(res) {
+          return chai.request(app)
+            .delete(`/recipes/${res.body[0].id}`);
+        })
+        .then(function(res) {
+          expect(res).to.have.status(204);
+        })
+    );
+  });
+
 
 });
